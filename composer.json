@@ -1,4 +1,18 @@
 {
+    "name": "arsalanthange/myphpframework",
+    "description": "Inspired from various PHP frameworks I've worked with, I am currently working on this project as a hobby to learn new concepts.",
+    "keywords": ["php", "framework", "hobby"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arsalan Thange",
+            "email": "arsalan.thange@gmail.com"
+        }
+    ],
+    "type": "project",
+    "require": {
+		"php": ">=7.1"
+    },
     "autoload": {
         "psr-4": {
             "Core\\": "core/",
