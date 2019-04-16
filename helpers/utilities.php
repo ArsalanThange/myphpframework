@@ -84,3 +84,17 @@ if (!function_exists('sanitizeArray')) {
         return $data;
     }
 }
+
+if (!function_exists('redirect')) {
+    /**
+     * Redirect application to a url.
+     *
+     * @param  string  $to
+     * @param  int     $http_status
+     * @return void
+     */
+    function redirect($to = '/', $http_status = 302)
+    {
+        header('Location: ' . $to, true, $http_status);
+    }
+}
