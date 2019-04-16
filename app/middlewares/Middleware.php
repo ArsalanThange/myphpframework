@@ -12,7 +12,7 @@ class Middleware
     public $middlewares = [];
 
     /**
-     * Construct authentication check.
+     * Construct middleware registration.
      *
      * @return void
      */
