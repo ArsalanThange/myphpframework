@@ -105,10 +105,10 @@ class RouteDispatcher
      */
     public function validateCSRF()
     {
-        if (!isset($_REQUEST['token']) 
-            || !isset($_SESSION['token']) 
-            || ($_REQUEST['token'] 
-            != $_SESSION['token'])
+        if (!isset($_REQUEST['token'])
+            || !isset($_SESSION['token'])
+            || ($_REQUEST['token']
+                != $_SESSION['token'])
         ) {
             throw new HttpException(403, 'Invalid CSRF Token.');
         }
@@ -121,7 +121,7 @@ class RouteDispatcher
      */
     public function checkMiddleware($route)
     {
-        if ($route['guard']) {
+        if (isset($route['guard']) && $route['guard']) {
             $middleware = new Middleware;
             $middleware->execute($route['guard']);
         }
