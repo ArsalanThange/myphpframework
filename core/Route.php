@@ -16,12 +16,11 @@ class Route
      *
      * @param string $route Route for the application
      * @param string $to    To which controller and method should this route go
-     * @param string $auth  Middleware name
      * @return Core\Route
      */
-    public function get($route, $to, $auth = null)
+    public function get($route, $to)
     {
-        return $this->addRoute($route, $to, 'GET', $auth);
+        return $this->addRoute($route, $to, 'GET');
     }
 
     /**
@@ -29,12 +28,11 @@ class Route
      *
      * @param string $route Route for the application
      * @param string $to    To which controller and method should this route go
-     * @param string $auth  Middleware name
      * @return Core\Route
      */
-    public function post($route, $to, $auth = null)
+    public function post($route, $to)
     {
-        return $this->addRoute($route, $to, 'POST', $auth);
+        return $this->addRoute($route, $to, 'POST');
     }
 
     /**
@@ -43,10 +41,9 @@ class Route
      * @param string $route Route for the application
      * @param string $to    To which controller and method should this route go
      * @param string $type  HTTP request type GET/POST
-     * @param string $auth  Middleware name
      * @return Core\Route
      */
-    protected function addRoute($route, $to, $type, $auth)
+    protected function addRoute($route, $to, $type)
     {
         $to = explode('@', $to);
         $this->routes[] = [
@@ -54,7 +51,6 @@ class Route
             'type' => $type,
             'controller' => $to[0],
             'method' => $to[1],
-            'guard' => $auth,
         ];
 
         return $this;
