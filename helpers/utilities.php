@@ -98,3 +98,30 @@ if (!function_exists('redirect')) {
         header('Location: ' . $to, true, $http_status);
     }
 }
+
+if (!function_exists('session_get')) {
+    /**
+     * Get value from $_SESSION.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    function session_get($key)
+    {
+        isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+    }
+}
+
+if (!function_exists('session_set')) {
+    /**
+     * Set value to $_SESSION for given key.
+     *
+     * @param string $key
+     * @param string $value
+     * @return void
+     */
+    function session_set($key, $value)
+    {
+        $_SESSION[$key] = $value;
+    }
+}
