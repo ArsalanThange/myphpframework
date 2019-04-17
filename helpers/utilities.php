@@ -125,3 +125,16 @@ if (!function_exists('session_set')) {
         $_SESSION[$key] = $value;
     }
 }
+
+if (!function_exists('session_unset')) {
+    /**
+     * Unset value of $_SESSION for given key.
+     *
+     * @param string $key
+     * @return void
+     */
+    function session_unset($key)
+    {
+        unset($_SESSION[$key]);
+    }
+}
