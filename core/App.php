@@ -41,33 +41,33 @@ class App
      */
     protected function throttleRequests()
     {
-        if (isset($_SESSION['request_throttle_count'])) {
-            $_SESSION['request_throttle_count']++;
-        } else {
-            $_SESSION['request_throttle_count'] = 1;
-        }
+        $request_count = session_get('request_throttle_count');
+        $request_count = $request_count ? $request_count++ : 1;
+        session_set('request_throttle_count', $request_count);
 
-        if (isset($_SESSION['request_throttle_time'])) {
+        $request_time = session_get('request_throttle_time');
+
+        if ($request_time) {
 
             $current_time = new \DateTime();
             $current_time = $current_time->modify('-1 second')->format('Y-m-d H:i:s');
 
-            if ($_SESSION['request_throttle_time'] < $current_time) {
+            if ($request_time < $current_time) {
 
                 //Update throttle time and reset current request count
-                $_SESSION['request_throttle_time'] = date('Y-m-d H:i:s');
-                $_SESSION['request_throttle_count'] = 0;
+                session_set('request_throttle_time', date('Y-m-d H:i:s'));
+                session_set('request_throttle_count', 0);
 
             } else {
 
-                if ($_SESSION['request_throttle_count'] > getConfig('request_throttle_count')) {
+                if ($request_count > getConfig('request_throttle_count')) {
                     $this->throwHttpError(429);
                 }
 
             }
 
         } else {
-            $_SESSION['request_throttle_time'] = date('Y-m-d H:i:s');
+            session_set('request_throttle_time', date('Y-m-d H:i:s'));
         }
     }
 
