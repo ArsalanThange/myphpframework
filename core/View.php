@@ -2,8 +2,6 @@
 
 namespace Core;
 
-use Core\Auth;
-
 class View
 {
     /**
@@ -64,9 +62,7 @@ class View
      */
     public function setErrors()
     {
-        if (isset($_SESSION['errors'])) {
-            $this->errors = $_SESSION['errors'];
-        }
+        $this->errors = session_get('errors', []);
     }
 
     /**
@@ -76,7 +72,7 @@ class View
      */
     public function unsetErrors()
     {
-        unset($_SESSION['errors']);
+        u_session_unset('errors');
     }
 
 }
