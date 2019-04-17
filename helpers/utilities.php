@@ -126,14 +126,14 @@ if (!function_exists('session_set')) {
     }
 }
 
-if (!function_exists('session_unset')) {
+if (!function_exists('u_session_unset')) {
     /**
      * Unset value of $_SESSION for given key.
      *
      * @param string $key
      * @return void
      */
-    function session_unset($key)
+    function u_session_unset($key)
     {
         unset($_SESSION[$key]);
     }
