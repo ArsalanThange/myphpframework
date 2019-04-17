@@ -4,6 +4,8 @@ namespace Core;
 
 use App\Exceptions\HttpException;
 use App\Middlewares\Middleware;
+use Core\ControllerDispatcher;
+use Core\Request;
 
 class RouteDispatcher
 {
@@ -54,6 +56,8 @@ class RouteDispatcher
         }
 
         $this->checkMiddleware($valid_http_method[0]);
+
+        $this->dispatch($valid_http_method[0]);
     }
 
     /**
@@ -113,5 +117,16 @@ class RouteDispatcher
             $middleware = new Middleware;
             $middleware->execute($route['guard']);
         }
+    }
+
+    /**
+     * Validate the requested route against registered routes.
+     *
+     * @param string $route Requested route
+     * @return array
+     */
+    public function dispatch($route)
+    {
+        $controller_dispatcher = new ControllerDispatcher($route['controller'], $route['method']);
     }
 }
