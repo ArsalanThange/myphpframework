@@ -29,6 +29,8 @@ class RouteDispatcher
      * Check the requested route against registered route.
      *
      * @return void
+     * 
+     * @throws \App\Exceptions\HttpExcception
      */
     public function checkRoutes()
     {
