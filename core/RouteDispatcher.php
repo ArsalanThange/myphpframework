@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use App\Exceptions\HttpException;
+
 class RouteDispatcher
 {
     /**
@@ -31,6 +33,12 @@ class RouteDispatcher
     public function checkRoutes()
     {
         $route = explode('?', trim($_SERVER['REQUEST_URI']), 2)[0];
+
+        $valid_routes = $this->isValidRoute($route);
+
+        if(!count($valid_routes)) {
+            throw new HttpException(404, 'Page not found.');
+        }
     }
 
     /**
