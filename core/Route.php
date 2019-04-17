@@ -46,7 +46,7 @@ class Route
      * @param string $auth  Middleware name
      * @return void
      */
-    public function addRoute($route, $to, $type, $auth)
+    protected function addRoute($route, $to, $type, $auth)
     {
         $to = explode('@', $to);
         $this->routes[] = [
@@ -56,5 +56,16 @@ class Route
             'method' => $to[1],
             'guard' => $auth,
         ];
+    }
+
+    /**
+     * Add middleware to the route.
+     *
+     * @param string $middleware  Middleware name
+     * @return void
+     */
+    public function middleware($middleware)
+    {
+        $this->routes[count($this->routes) - 1]['guard'] = $middleware;
     }
 }
