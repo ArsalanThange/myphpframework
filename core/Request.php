@@ -29,6 +29,7 @@ class Request
      * Converting incoming request objects/arrays into Request objects.
      *
      * @param array|object $request    Incoming $_REQUEST parameter
+     * @return void
      */
     protected function makeRequest($request)
     {
@@ -78,8 +79,8 @@ class Request
                 }
             }
 
-				}
-				
+        }
+
         return $this->errors;
     }
 }
