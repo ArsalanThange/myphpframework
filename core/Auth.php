@@ -46,13 +46,10 @@ class Auth
         } else {
 
             if (password_verify($password, $user->password)) {
-
-                $_SESSION['is_logged_in'] = true;
                 unset($user->password);
-                $_SESSION['user'] = $user;
+                self::setSession($user);
 
                 return true;
-
             } else {
                 return false;
             }
@@ -68,5 +65,16 @@ class Auth
     {
         session_destroy();
         return true;
+    }
+
+    /**
+     * Set session variables for current user.
+     *
+     * @return void
+     */
+    protected static function setSession($user)
+    {
+        session_set('is_logged_in', true);
+        session_set('user', $user);
     }
 }
