@@ -36,13 +36,13 @@ class RouteDispatcher
 
         $valid_routes = $this->isValidRoute($route);
 
-        if(!count($valid_routes)) {
+        if (!count($valid_routes)) {
             throw new HttpException(404, 'Page not found.');
         }
 
         $valid_http_method = $this->isValidHttpMethod($valid_routes);
 
-        if(!count($valid_http_method)) {
+        if (!count($valid_http_method)) {
             throw new HttpException(405, 'Method Not Allowed.');
         }
     }
@@ -74,6 +74,6 @@ class RouteDispatcher
             return $elem['type'] == $_SERVER['REQUEST_METHOD'];
         });
 
-        return $found;
+        return array_values($found);
     }
 }
