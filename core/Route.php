@@ -16,7 +16,7 @@ class Route
      *
      * @param string $route Route for the application
      * @param string $to    To which controller and method should this route go
-     * @param string $auth  Access to the route ("auth" for logged in users, "guest" for logged out users, "both" for all users)
+     * @param string $auth  Middleware name
      * @return void
      */
     public function get($route, $to, $auth = null)
@@ -29,7 +29,7 @@ class Route
      *
      * @param string $route Route for the application
      * @param string $to    To which controller and method should this route go
-     * @param string $auth  Access to the route ("auth" for logged in users, "guest" for logged out users, "both" for all users)
+     * @param string $auth  Middleware name
      * @return void
      */
     public function post($route, $to, $auth = null)
@@ -43,7 +43,7 @@ class Route
      * @param string $route Route for the application
      * @param string $to    To which controller and method should this route go
      * @param string $type  HTTP request type GET/POST
-     * @param string $auth  Access to the route ("auth" for logged in users, "guest" for logged out users, "both" for all users)
+     * @param string $auth  Middleware name
      * @return void
      */
     public function addRoute($route, $to, $type, $auth)
