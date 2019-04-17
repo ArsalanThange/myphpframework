@@ -30,8 +30,8 @@ class Auth
      * Attempt to log in user.
      * If logged in successfully, set the user's details in session.
      *
-     * @param  string   $username   Username of the user trying to log in
-     * @param  string   $password   Password of the user trying to log in
+     * @param string $username  Username of the user trying to log in
+     * @param string $password  Password of the user trying to log in
      * @return boolean
      */
     public static function attempt($username, $password)
@@ -70,6 +70,7 @@ class Auth
     /**
      * Set session variables for current user.
      *
+     * @param App\Models\User $user
      * @return void
      */
     protected static function setSession($user)
