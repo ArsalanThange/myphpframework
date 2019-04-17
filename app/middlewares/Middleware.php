@@ -32,4 +32,15 @@ class Middleware
             'auth' => \App\Middlewares\Authenticate::class,
         ];
     }
+
+    /**
+     * Execute the given middleware.
+     *
+     * @param string $middleware Middleware name registered for the requested route
+     * @return void
+     */
+    public function execute($middleware)
+    {
+        $execute = new $this->middlewares[$middleware];
+    }
 }
