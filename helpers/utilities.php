@@ -108,7 +108,7 @@ if (!function_exists('session_get')) {
      */
     function session_get($key)
     {
-        isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
     }
 }
 
