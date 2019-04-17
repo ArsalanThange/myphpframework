@@ -3,6 +3,7 @@
 namespace Core;
 
 use App\Exceptions\HttpException;
+use App\Middlewares\Middleware;
 
 class RouteDispatcher
 {
@@ -29,7 +30,7 @@ class RouteDispatcher
      * Check the requested route against registered route.
      *
      * @return void
-     * 
+     *
      * @throws \App\Exceptions\HttpExcception
      */
     public function checkRoutes()
@@ -48,9 +49,11 @@ class RouteDispatcher
             throw new HttpException(405, 'Method Not Allowed.');
         }
 
-        if($valid_http_method[0]['type'] == "POST") {
+        if ($valid_http_method[0]['type'] == "POST") {
             $this->validateCSRF();
         }
+
+        $this->checkMiddleware($valid_http_method[0]);
     }
 
     /**
@@ -88,13 +91,27 @@ class RouteDispatcher
      * Throws and redirects user to unauthorized page if the token is invalid.
      *
      * @return void
-     * 
+     *
      * @throws \App\Exceptions\HttpException
      */
     public function validateCSRF()
     {
         if (!isset($_REQUEST['token']) || !isset($_SESSION['token']) || ($_REQUEST['token'] != $_SESSION['token'])) {
             throw new HttpException(403, 'Invalid CSRF Token.');
+        }
+    }
+
+    /**
+     * Instantiate middleware registered in Middleware Class for the requested route;
+     *
+     * @return void
+     *
+     */
+    public function checkMiddleware($route)
+    {
+        if ($route['guard']) {
+            $middleware = new Middleware;
+            $middleware->execute($route['guard']);
         }
     }
 }
