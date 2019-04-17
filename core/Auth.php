@@ -13,7 +13,7 @@ class Auth
      */
     public static function check()
     {
-        return isset($_SESSION['is_logged_in']) ? true : false;
+        return session_get('is_logged_in');
     }
 
     /**
@@ -23,7 +23,7 @@ class Auth
      */
     public static function user()
     {
-        return isset($_SESSION['user']) ? $_SESSION['user'] : false;
+        return session_get('user');
     }
 
     /**
