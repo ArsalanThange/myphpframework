@@ -109,7 +109,6 @@ class RouteDispatcher
      * Instantiate middleware registered in Middleware Class for the requested route;
      *
      * @return void
-     *
      */
     public function checkMiddleware($route)
     {
@@ -120,10 +119,10 @@ class RouteDispatcher
     }
 
     /**
-     * Validate the requested route against registered routes.
+     * Send route to be dispatched in Controller.
      *
      * @param string $route Requested route
-     * @return array
+     * @return void
      */
     public function dispatch($route)
     {
