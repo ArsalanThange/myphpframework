@@ -2,25 +2,11 @@
 
 namespace Core;
 
-use Core\Request;
 use App\Controllers\HttpController;
+use Core\RouteDispatcher;
 
 class App
 {
-    /**
-     * Default controller for routing.
-     *
-     * @var string
-     */
-    protected $controller = 'App\Controllers\HomeController';
-
-    /**
-     * Default method for routing.
-     *
-     * @var string
-     */
-    protected $method = 'index';
-
     /**
      * Get controllers and methods from URL and send them for execution.
      *
@@ -34,73 +20,18 @@ class App
             $this->throttleRequests();
         }
 
-        $this->parseURL();
-        $controller = new $this->controller;
-        $method = $this->method;
-
-        $request = new Request($_REQUEST);
-
-        $controller->$method($request);
+        $this->dispatchRoute();
     }
 
     /**
-     * Parses the incoming URL and segregates it into Controllers, methods and parameters.
-     * Takes care of URL access to guests and authenticated users.
-     * Redirects to appropriate http error in case of invalid or unauthorized access.
+     * Send application to RouteDispatcher for execution.
      *
      * @return void
      */
-    protected function parseURL()
+    protected function dispatchRoute()
     {
         include '../routes/routes.php';
-
-        $request = explode('?', trim($_SERVER['REQUEST_URI']), 2)[0];
-        $found = 0;
-
-        foreach ($route->routes as $key => $value) {
-
-            if ($value['name'] == $request && $_SERVER['REQUEST_METHOD'] == $value['type']) {
-
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $this->validateCSRF();
-                }
-
-                $found = 1;
-
-                if ($value['guard'] == 'auth' && !Auth::check()) {
-                    header('Location: /login');
-                    break;
-                }
-
-                if ($value['guard'] == 'guest' && isset($_SESSION['is_logged_in'])) {
-                    header('Location: /');
-                    break;
-                }
-
-                $this->controller = 'App\Controllers\\'.$value['controller'];
-                $this->method = $value['method'];
-                break;
-
-            }
-
-        }
-
-        if (!$found) {
-            $this->throwHttpError(404);
-        }
-    }
-
-    /**
-     * Validates incoming POST requests for CSRF Token.
-     * Throws and redirects user to unauthorized page if the token is invalid.
-     *
-     * @return void
-     */
-    public function validateCSRF()
-    {
-        if ($_REQUEST['token'] != $_SESSION['token']) {
-            $this->throwHttpError(403);
-        }
+        $route_dispatcher = new RouteDispatcher($route->routes);
     }
 
     /**
