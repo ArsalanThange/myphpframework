@@ -28,7 +28,7 @@ class ControllerDispatcher
     protected $method = 'index';
 
     /**
-     * Construct validation of incoming Request Route.
+     * Construct Controller and method for dispatch.
      *
      * @param string $controller    Controller for the requested route
      * @param string $method        Method for the requested route
@@ -43,9 +43,9 @@ class ControllerDispatcher
     }
 
     /**
-     * Validate the requested route against registered routes.
+     * Dispatch the controller and method for the requested route.
      *
-     * @return array
+     * @return void
      */
     public function dispatch()
     {
