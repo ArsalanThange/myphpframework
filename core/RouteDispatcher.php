@@ -45,6 +45,10 @@ class RouteDispatcher
         if (!count($valid_http_method)) {
             throw new HttpException(405, 'Method Not Allowed.');
         }
+
+        if($valid_http_method[0]['type'] == "POST") {
+            $this->validateCSRF();
+        }
     }
 
     /**
@@ -75,5 +79,20 @@ class RouteDispatcher
         });
 
         return array_values($found);
+    }
+
+    /**
+     * Validates incoming POST requests for CSRF Token.
+     * Throws and redirects user to unauthorized page if the token is invalid.
+     *
+     * @return void
+     * 
+     * @throws \App\Exceptions\HttpException
+     */
+    public function validateCSRF()
+    {
+        if (!isset($_REQUEST['token']) || !isset($_SESSION['token']) || ($_REQUEST['token'] != $_SESSION['token'])) {
+            throw new HttpException(403, 'Invalid CSRF Token.');
+        }
     }
 }
