@@ -49,7 +49,7 @@ class Database
     /**
      * Return instance of currently connected database.
      *
-     * @return PDO Instance
+     * @return \PDO
      */
 
     public static function getInstance()
@@ -63,7 +63,7 @@ class Database
     /**
      * Create a new database connection instance.
      *
-     * @return void
+     * @return \PDO
      */
     public function __construct()
     {
@@ -79,7 +79,7 @@ class Database
             $this->connection = $pdo;
 
             return $this->connection;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die("Connection failed: " . $e->getMessage());
         }
     }
@@ -90,9 +90,11 @@ class Database
     /**
      * Prepare and Execute Database Queries.
      *
-     * @param  string     $query    SQL Query which is to be executed in PDO
-     * @param  array   $binds    Bind values which are to be bound during execution
-     * @return PDO
+     * @param string $query SQL Query which is to be executed in PDO
+     * @param array $binds  Bind values which are to be bound during execution
+     * @return \PDO
+     * 
+     * @throws \Exception
      */
     public function query($query, $binds)
     {
