@@ -30,6 +30,7 @@ class Middleware
     {
         $this->middlewares = [
             'auth' => \App\Middlewares\Authenticate::class,
+            'guest' => \App\Middlewares\Guest::class,
         ];
     }
 
