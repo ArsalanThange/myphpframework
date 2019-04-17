@@ -2,7 +2,6 @@
 
 namespace Core;
 
-use App\Controllers\HttpController;
 use Core\RouteDispatcher;
 
 class App
@@ -27,18 +26,6 @@ class App
     {
         include '../routes/routes.php';
         $route_dispatcher = new RouteDispatcher($route->routes);
-    }
-
-    /**
-     * Throws and redirects user to http error page.
-     *
-     * @param int|string $error_code    HTTP error code
-     * @return void
-     */
-    public function throwHttpError($error_code)
-    {
-        $http = new HttpController;
-        $http->httpError($error_code);
     }
 
     /**
