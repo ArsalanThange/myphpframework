@@ -15,11 +15,6 @@ class App
     public function __construct()
     {
         $this->setAppDefaults();
-
-        if (getConfig('enable_request_throttle')) {
-            $this->throttleRequests();
-        }
-
         $this->dispatchRoute();
     }
 
@@ -32,43 +27,6 @@ class App
     {
         include '../routes/routes.php';
         $route_dispatcher = new RouteDispatcher($route->routes);
-    }
-
-    /**
-     * Throttles incoming requests to prevent DOS attacks.
-     *
-     * @return void
-     */
-    protected function throttleRequests()
-    {
-        $request_count = session_get('request_throttle_count');
-        $request_count = $request_count ? $request_count++ : 1;
-        session_set('request_throttle_count', $request_count);
-
-        $request_time = session_get('request_throttle_time');
-
-        if ($request_time) {
-
-            $current_time = new \DateTime();
-            $current_time = $current_time->modify('-1 second')->format('Y-m-d H:i:s');
-
-            if ($request_time < $current_time) {
-
-                //Update throttle time and reset current request count
-                session_set('request_throttle_time', date('Y-m-d H:i:s'));
-                session_set('request_throttle_count', 0);
-
-            } else {
-
-                if ($request_count > getConfig('request_throttle_count')) {
-                    $this->throwHttpError(429);
-                }
-
-            }
-
-        } else {
-            session_set('request_throttle_time', date('Y-m-d H:i:s'));
-        }
     }
 
     /**
