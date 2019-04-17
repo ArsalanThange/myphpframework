@@ -106,9 +106,9 @@ if (!function_exists('session_get')) {
      * @param string $key
      * @return mixed
      */
-    function session_get($key)
+    function session_get($key, $default = false)
     {
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
     }
 }
 
