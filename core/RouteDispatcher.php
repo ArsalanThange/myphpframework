@@ -37,12 +37,27 @@ class RouteDispatcher
      * Validate the requested route against registered routes.
      *
      * @param string $route Requested route
-     * @return void
+     * @return array
      */
     public function isValidRoute($route)
     {
         $found = array_filter($this->routes, function ($elem) use ($route) {
             return $elem['name'] == $route;
+        });
+
+        return $found;
+    }
+
+    /**
+     * Check if the HTTP Method of requested route is valid and registered.
+     *
+     * @param array $valid_routes Valid route endpoints for the requested route
+     * @return array
+     */
+    public function isValidMethod($valid_routes)
+    {
+        $found = array_filter($valid_routes, function ($elem) {
+            return $elem['type'] == $_SERVER['REQUEST_METHOD'];
         });
 
         return $found;
