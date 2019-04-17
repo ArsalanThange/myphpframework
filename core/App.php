@@ -7,7 +7,7 @@ use Core\RouteDispatcher;
 class App
 {
     /**
-     * Get controllers and methods from URL and send them for execution.
+     * Bootstrap the application.
      *
      * @return void
      */
