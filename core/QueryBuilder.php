@@ -87,7 +87,7 @@ class QueryBuilder
     /**
      * Current database instance.
      *
-     * @var PDO
+     * @var \PDO
      */
     protected $db;
 
@@ -109,14 +109,14 @@ class QueryBuilder
     /**
      * Final results returned from the executed query.
      *
-     * @var Model
+     * @var App\Models\Model
      */
     protected $results;
 
     /**
      * Results returned for intermediate table in case of Many-to-Many relationship from the executed query.
      *
-     * @var Model
+     * @var App\Models\Model
      */
     protected $intermediate_results;
 
@@ -180,7 +180,7 @@ class QueryBuilder
     /**
      * Sends final SELECT query for execution along with relations.
      *
-     * @return mixed, Model|Array of objects
+     * @return mixed Model|Array of objects
      */
     public function get()
     {
@@ -193,7 +193,7 @@ class QueryBuilder
     /**
      * Sends final SELECT query for execution along with relations.
      *
-     * @return mixed, Model|Single object
+     * @return mixed Model|Single object
      */
     public function first()
     {
@@ -210,7 +210,7 @@ class QueryBuilder
     /**
      * Generates response structure which is to be returned after executing SELECT queries.
      *
-     * @return Model
+     * @return App\Models\Model
      */
     public function generateResponse()
     {
@@ -268,7 +268,7 @@ class QueryBuilder
      * @param Model $obj            Object of the current Model Class
      * @param string $foreign_key   Foreign key for the relationship defined in Model Class
      * @param array $ids            IDs of records whose relationship is to be fetched
-     * @return mixed, Model|Array of objects
+     * @return mixed Model|Array of objects
      */
     public function processHasMany($obj, $foreign_key, $ids)
     {
@@ -281,7 +281,7 @@ class QueryBuilder
      * @param Model $obj            Object of the current Model Class
      * @param string $foreign_key   Foreign key for the relationship defined in Model Class
      * @param array $ids            IDs of records whose relationship is to be fetched
-     * @return mixed, Model|Array of objects
+     * @return mixed Model|Array of objects
      */
     public function processBelongsTo($obj, $foreign_key, $ids)
     {
@@ -291,7 +291,7 @@ class QueryBuilder
     /**
      * Fetch relationship records for Many-To-Many relationship.
      *
-     * @param Model $obj                    Object of the current Model Class
+     * @param App\Models\Model $obj         Object of the current Model Class
      * @param string $intermediate_table    Table name of the intermediate tablet for Many-to-Many
      * @param string $primary_table_key     Column name of the primary table in intermediate table
      * @param string $foreign_key           Foreign key for the relationship defined in Model Class
@@ -318,7 +318,7 @@ class QueryBuilder
      * Currently only works for One-To-One, One-To-Many and Many-To-On relationships.
      * TO DO Many to Many
      *
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function fetchRelations()
     {
@@ -367,7 +367,7 @@ class QueryBuilder
      * Build the start of SELECT clause.
      *
      * @param mixed string|array $columns   Database columns for SELECT clause
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function select($columns = null, $from = null)
     {
@@ -403,7 +403,7 @@ class QueryBuilder
      * @param string $column    Database column on which WHERE clause is to be used
      * @param string $operator  DB Operators such as =, >=, <, LIKE etc
      * @param mixed $value      Value against which the column is to be checked
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function where($column, $operator, $value)
     {
@@ -425,7 +425,7 @@ class QueryBuilder
      *
      * @param string $column    Database column on which WHEREIN clause is to be used
      * @param array $values     Values to be checked for the column
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function whereIn($column, $values)
     {
@@ -447,7 +447,7 @@ class QueryBuilder
     /**
      * Build the start of INSERT clause.
      *
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function insert()
     {
@@ -460,7 +460,7 @@ class QueryBuilder
      * Build the VALEUS query for INSERT clause.
      *
      * @param array $columns    Database Columns on which INSERT clause is to be used
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function columns($columns)
     {
@@ -476,7 +476,7 @@ class QueryBuilder
      * Bind values for INSERT clause.
      *
      * @param array $value  Values against columns for INSERT clause
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function values($values)
     {
@@ -541,7 +541,7 @@ class QueryBuilder
      * Set requested relationships.
      *
      * @param array $relations  Contains relationships declared in the incoming Model Class
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function with($relations = [])
     {
@@ -565,7 +565,7 @@ class QueryBuilder
     /**
      * Begin UPDATE query.
      *
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function set()
     {
@@ -591,7 +591,7 @@ class QueryBuilder
     /**
      * Send final "DELETE" query for execution.
      *
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function delete()
     {
@@ -604,7 +604,7 @@ class QueryBuilder
      * Begin "DELETE" query.
      * This is an UPDATE clause and will only be used to soft delete records.
      *
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function setDelete()
     {
@@ -619,7 +619,7 @@ class QueryBuilder
      *
      * @param string $column    Column of the database on which sort is to be performed
      * @param string $order     Sort Order for Database - ASC|DESC
-     * @return QueryBuilder
+     * @return Core\QueryBuilder
      */
     public function orderBy($column, $order = 'ASC')
     {
