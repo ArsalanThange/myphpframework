@@ -381,18 +381,41 @@ class QueryBuilder
     {
         if (count($this->results) && count($this->with)) {
 
-            foreach ($this->with as $key => $method) {
+            foreach ($this->with as $key => $relation_name) {
 
-                //Execute the relationship method declared in the current Model's class
+                //Set nested with to false
+                $nested_with = false;
+
+                //Set method to execute as current relation name
+                $method = $relation_name;
+
+                //Check if relation is nested, meaning related records are to be fetched for inner relations.
+                if (strpos($relation_name, '.') !== false) {
+
+                    //Explode relation and assign first relation to be executed.
+                    $nested_with = explode('.', $relation_name, 2);
+                    $method = $nested_with[0];
+                }
+
+                //Execute the method in model class
                 $relation = $this->model->$method();
 
                 $class = 'App\Models\\' . $relation['class'];
                 $foreign_key = $relation['foreign_key'];
                 $relationship = $relation['relation'];
 
+                //Make a new instance of Core\QueryBuilder and the requested App\Models\Model Class
                 $builder = new QueryBuilder;
                 $obj = new $class;
                 $builder->model = $obj;
+
+                /**
+                 * If requested for nested with, call with method on object.
+                 * This makes a recursively loop of and fetches deeper relationships.
+                 */
+                if ($nested_with) {
+                    $obj = $obj->with([$nested_with[1]]);
+                }
 
                 switch ($relationship) {
                     case 'hasMany':
@@ -411,10 +434,10 @@ class QueryBuilder
                         break;
                 }
 
-                $this->relations[$method] = $result;
+                $this->relations = $result;
+                $this->generateResponse($method);
             }
 
-            $this->generateResponse();
         }
 
         return $this;
