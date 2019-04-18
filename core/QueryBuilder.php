@@ -417,6 +417,25 @@ class QueryBuilder
     }
 
     /**
+     * Build the OR for WHERE clause. Bind values for WHERE clause.
+     *
+     * @param string $column    Database column on which WHERE clause is to be used
+     * @param string $operator  DB Operators such as =, >=, <, LIKE etc
+     * @param mixed $value      Value against which the column is to be checked
+     * @return Core\QueryBuilder
+     */
+    public function orWhere($column, $operator, $value)
+    {
+        $this->appendWhere(false);
+
+        $this->where .= $column . " " . $operator . " " . ' ? ';
+
+        $this->binds[] = $value;
+
+        return $this;
+    }
+
+    /**
      * Build the WHEREIN clause. Bind values for WHEREIN clause.
      *
      * @param string $column    Database column on which WHEREIN clause is to be used
@@ -443,7 +462,8 @@ class QueryBuilder
      * @param array $values     Values to be checked for the column
      * @return Core\QueryBuilder
      */
-    protected function appendWhere($and = true) {
+    protected function appendWhere($and = true)
+    {
         if (strpos($this->where, "WHERE") === false) {
             $this->where = " WHERE ";
         } elseif ($and) {
