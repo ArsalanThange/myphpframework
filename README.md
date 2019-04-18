@@ -137,3 +137,56 @@ class HomeController extends Controller
 
 //Output: username
 ```
+
+## Controllers
+All controllers for the application are declared in [controllers](https://github.com/ArsalanThange/myphpframework/tree/master/app/controllers) folder and must extend the `COntroller` class.
+
+#### Declaring a Home Controller
+```php
+namespace App\Controllers;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        echo 'Hello World';
+    }
+}
+```
+
+#### Access GET/POST parameters in controllers
+Assuming the GET URL is `?id=1&foo=bar`
+```php
+namespace App\Controllers;
+
+use Core\Request;
+
+class HomeController extends Controller
+{
+    public function index(Request $request)
+    {
+        echo $request->id;
+        echo $request->foo;
+    }
+}
+
+//Output: 1bar
+```
+
+#### Loading a HTML view in controllers.
+This will load the `index` view defined in [views](https://github.com/ArsalanThange/myphpframework/tree/master/app/views) folder. More details on `View` and how to use them can be found in Views section.
+```php
+namespace App\Controllers;
+
+use Core\Request;
+
+class HomeController extends Controller
+{
+    public function index(Request $request)
+    {
+        $message = 'Welcome to my Framework';
+
+        $this->view('index', $message)->render();
+    }
+}
+```
