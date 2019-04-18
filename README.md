@@ -23,6 +23,7 @@ This framework consists below functionalities
 
 As I have started development of this framework only a few weeks back, there are loads of functionalities pending. Some of them being
 
+- A lot more to update in Readme.
 - Custom logging for application.
 - More functions for Database such as LIMIT and Pagination.
 - More error handling.
@@ -88,4 +89,51 @@ Routes can be declared with `middlewares`.
 ```php
 $route->get('/login', 'LoginController@showlogin')->middleware('guest');
 $route->get('/', 'HomeController@index')->middleware('auth');
+```
+
+## Models
+All models for the application are declared in [models](https://github.com/ArsalanThange/myphpframework/tree/master/app/models) folder and must extend the `Model` class.
+
+#### Declaring a User Model
+```php
+namespace App\Models;
+
+class User extends Model
+{
+    /**
+     * Setting table value for User class.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * Get the database column to be used for logging in.
+     * Default returns username. (Can be email, mobile etc)
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return 'username';
+    }
+}
+```
+
+#### Access User Model in Controller
+```php
+namespace App\Controllers;
+
+use App\Models\User;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        $user = new User;
+        echo $user->getUsername();
+    }
+}
+
+//Output: username
 ```
