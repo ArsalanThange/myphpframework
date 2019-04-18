@@ -263,6 +263,22 @@ class QueryBuilder
     }
 
     /**
+     * Filter the relationship results and return records only for the current object.
+     *
+     * @param App\Model $obj        Object of the current Model Class
+     * @param string $foreign_key   Foreign key for the relationship defined in Model Class
+     * @return array
+     */
+    protected function getHasManyForResponse($obj, $foreign_key)
+    {
+        $results = array_filter($this->relations, function ($elem) use ($obj, $foreign_key) {
+            return $elem->$foreign_key == $obj->id;
+        });
+
+        return $results;
+    }
+
+    /**
      * Fetch relationship records for One-To-Many relationship.
      *
      * @param Model $obj            Object of the current Model Class
