@@ -43,3 +43,49 @@ $route->get('/login', 'LoginController@showlogin')->middleware('guest');
 $route->get('/', 'HomeController@index')->middleware('auth');
 ```
 Appropriate HTTP errors are thrown if someone tries to access routes not declared or if they do not have access.
+
+## Middlewares
+Middlewares are used to guard routes against the defined logic. They are executed whenever someone tries to access the route.
+Middlewares are defined in [middlewares](https://github.com/ArsalanThange/myphpframework/tree/master/app/middlewares) folder and must extend `Middleware` Class.
+
+Middlewares must be registered in `registerMiddlewares` of `Middleware` Class.
+
+#### Creating a middleware
+The `Authenticate` middleware redirects the user to Login Page if the user is not logged in.
+
+```php
+namespace App\Middlewares;
+
+use Core\Auth;
+
+class Authenticate extends Middleware
+{
+    /**
+     * Construct authentication check.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authenticateCheck();
+    }
+
+    /**
+     * Check if the user is logged in, if not redirect to login page.
+     *
+     * @return void
+     */
+    public function authenticateCheck()
+    {
+        if (!Auth::check()) {
+            redirect('/login');
+        }
+    }
+}
+```
+
+Routes can be declared with `middlewares`.
+```php
+$route->get('/login', 'LoginController@showlogin')->middleware('guest');
+$route->get('/', 'HomeController@index')->middleware('auth');
+```
