@@ -12,6 +12,17 @@ class User extends Model
     protected $table = 'users';
 
     /**
+     * Get the database column to be used for logging in.
+     * Default returns username. (Can be email, mobile etc)
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return 'username';
+    }
+
+    /**
      * Declaring One-To-Many relationship between User and Message.
      *
      * @return array
@@ -37,7 +48,7 @@ class User extends Model
             'class' => 'Message',
             'table' => 'many_to_many',
             'primary_table_key' => 'user_id',
-            'foreign_key' => 'message_id'
+            'foreign_key' => 'message_id',
         ];
     }
 }

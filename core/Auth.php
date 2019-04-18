@@ -37,8 +37,10 @@ class Auth
     public static function attempt($username, $password)
     {
         $user = new User;
+        $column = $user->getUsername();
+
         $user = $user->select(['username', 'password', 'id'])
-            ->where('username', '=', $username)
+            ->where($column, '=', $username)
             ->first();
 
         if (!$user) {
