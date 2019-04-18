@@ -398,7 +398,7 @@ class QueryBuilder
     }
 
     /**
-     * Build the WHERE clause. Bind values for WHERE clause.
+     * Build the WHERE clause.
      *
      * @param string $column    Database column on which WHERE clause is to be used
      * @param string $operator  DB Operators such as =, >=, <, LIKE etc
@@ -407,17 +407,13 @@ class QueryBuilder
      */
     public function where($column, $operator, $value)
     {
-        $this->appendWhere();
-
-        $this->where .= $column . " " . $operator . " " . ' ? ';
-
-        $this->binds[] = $value;
+        $this->appendWhere()->makeWhereBinds($column, $operator, $value);
 
         return $this;
     }
 
     /**
-     * Build the OR for WHERE clause. Bind values for WHERE clause.
+     * Build the OR for WHERE clause.
      *
      * @param string $column    Database column on which WHERE clause is to be used
      * @param string $operator  DB Operators such as =, >=, <, LIKE etc
@@ -426,11 +422,7 @@ class QueryBuilder
      */
     public function orWhere($column, $operator, $value)
     {
-        $this->appendWhere(false);
-
-        $this->where .= $column . " " . $operator . " " . ' ? ';
-
-        $this->binds[] = $value;
+        $this->appendWhere(false)->makeWhereBinds($column, $operator, $value);
 
         return $this;
     }
@@ -458,8 +450,7 @@ class QueryBuilder
     /**
      * Append or Initiate WHERE clause.
      *
-     * @param string $column    Database column on which WHEREIN clause is to be used
-     * @param array $values     Values to be checked for the column
+     * @param boolean $and  Indicates if its AND / OR for WHERE. AND if ture, OR if false.
      * @return Core\QueryBuilder
      */
     protected function appendWhere($and = true)
@@ -471,6 +462,25 @@ class QueryBuilder
         } else {
             $this->where .= " OR ";
         }
+
+        return $this;
+    }
+
+    /**
+     * Assign columnd and Bind values for WHER clause.
+     *
+     * @param string $column    Database column on which WHERE clause is to be used
+     * @param string $operator  DB Operators such as =, >=, <, LIKE etc
+     * @param mixed $value      Value against which the column is to be checked
+     * @return Core\QueryBuilder
+     */
+    public function makeWhereBinds($column, $operator, $value)
+    {
+        $this->where .= $column . " " . $operator . " " . ' ? ';
+
+        $this->binds[] = $value;
+
+        return $this;
     }
 
     /**
