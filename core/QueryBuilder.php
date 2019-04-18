@@ -264,6 +264,7 @@ class QueryBuilder
 
     /**
      * Filter the relationship results and return records only for the current object.
+     * For One-To-Many.
      *
      * @param App\Model $obj        Object of the current Model Class
      * @param string $foreign_key   Foreign key for the relationship defined in Model Class
@@ -276,6 +277,23 @@ class QueryBuilder
         });
 
         return $results;
+    }
+
+    /**
+     * Filter the relationship results and return records only for the current object.
+     * For Many-To-One or One-To-One.
+     *
+     * @param App\Model $obj        Object of the current Model Class
+     * @param string $foreign_key   Foreign key for the relationship defined in Model Class
+     * @return App\Model
+     */
+    protected function getBelongsToForResponse($obj, $foreign_key)
+    {
+        $results = array_filter($this->relations, function ($elem) use ($obj, $foreign_key) {
+            return $elem->id == $obj->$foreign_key;
+        });
+
+        return isset($results[0]) ? $results[0] : (object) null;
     }
 
     /**
