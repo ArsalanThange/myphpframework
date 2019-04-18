@@ -139,7 +139,7 @@ class HomeController extends Controller
 ```
 
 ## Controllers
-All controllers for the application are declared in [controllers](https://github.com/ArsalanThange/myphpframework/tree/master/app/controllers) folder and must extend the `COntroller` class.
+All controllers for the application are declared in [controllers](https://github.com/ArsalanThange/myphpframework/tree/master/app/controllers) folder and must extend the `Controller` class.
 
 #### Declaring a Home Controller
 ```php
@@ -215,3 +215,12 @@ The view file can now access the data of `$message` using `$this->view_data`.
 ```php
 <h1> <?php echo $this->view_data ?> </h1>
 ```
+
+## Database
+Readme for Database calls and ORM coming soon! Lots of functionality has been built and can be found in HomeController. A lot of functionalities are still remaining and in the roadmap!
+
+## Request Validations
+Readme Coming Soon.
+
+## Authentication
+Readme Coming soon.
