@@ -142,7 +142,7 @@ class QueryBuilder
      *
      * @return void
      */
-    public function makeSelectQuery()
+    protected function makeSelectQuery()
     {
         $this->query = $this->select . $this->where . $this->order_by;
     }
@@ -152,7 +152,7 @@ class QueryBuilder
      *
      * @return void
      */
-    public function makeInsertQuery()
+    protected function makeInsertQuery()
     {
         $this->query = $this->insert . $this->values;
     }
@@ -162,7 +162,7 @@ class QueryBuilder
      *
      * @return void
      */
-    public function makeUpdateQuery()
+    protected function makeUpdateQuery()
     {
         $this->query = $this->update . $this->set . $this->where;
     }
@@ -172,7 +172,7 @@ class QueryBuilder
      *
      * @return void
      */
-    public function makeDeleteQuery()
+    protected function makeDeleteQuery()
     {
         $this->query = $this->delete . $this->where;
     }
@@ -180,7 +180,7 @@ class QueryBuilder
     /**
      * Sends final SELECT query for execution along with relations.
      *
-     * @return mixed Model|Array of objects
+     * @return App\Models\Model
      */
     public function get()
     {
@@ -212,7 +212,7 @@ class QueryBuilder
      *
      * @return App\Models\Model
      */
-    public function generateResponse()
+    protected function generateResponse()
     {
         foreach ($this->results as $result) {
 
@@ -270,7 +270,7 @@ class QueryBuilder
      * @param array $ids            IDs of records whose relationship is to be fetched
      * @return mixed Model|Array of objects
      */
-    public function processHasMany($obj, $foreign_key, $ids)
+    protected function processHasMany($obj, $foreign_key, $ids)
     {
         return $obj->select()->whereIn($foreign_key, $ids)->get();
     }
@@ -283,7 +283,7 @@ class QueryBuilder
      * @param array $ids            IDs of records whose relationship is to be fetched
      * @return mixed Model|Array of objects
      */
-    public function processBelongsTo($obj, $foreign_key, $ids)
+    protected function processBelongsTo($obj, $foreign_key, $ids)
     {
         return $obj->select()->whereIn($foreign_key, $ids)->get();
     }
@@ -298,7 +298,7 @@ class QueryBuilder
      * @param array $ids                    IDs of records whose relationship is to be fetched
      * @return mixed Model|Array of objects
      */
-    public function processBelongsToMany($obj, $intermediate_table, $primary_table_key, $foreign_key, $ids)
+    protected function processBelongsToMany($obj, $intermediate_table, $primary_table_key, $foreign_key, $ids)
     {
         $this->intermediate_results = $obj->select('*', $intermediate_table)
             ->whereIn($primary_table_key, $ids)
@@ -320,7 +320,7 @@ class QueryBuilder
      *
      * @return Core\QueryBuilder
      */
-    public function fetchRelations()
+    protected function fetchRelations()
     {
         if (count($this->results) && count($this->with)) {
 
@@ -462,7 +462,7 @@ class QueryBuilder
      * @param array $columns    Database Columns on which INSERT clause is to be used
      * @return Core\QueryBuilder
      */
-    public function columns($columns)
+    protected function columns($columns)
     {
         $db_columns = implode(', ', $columns);
         $insert_prepare = implode(', ', array_fill(0, count($columns), '?'));
@@ -478,7 +478,7 @@ class QueryBuilder
      * @param array $value  Values against columns for INSERT clause
      * @return Core\QueryBuilder
      */
-    public function values($values)
+    protected function values($values)
     {
         $this->binds = $values;
 
@@ -507,7 +507,7 @@ class QueryBuilder
      * @param string $operation     Database operation such as insert, select, update, delete
      * @return mixed
      */
-    public function sendToExecute($operation)
+    protected function sendToExecute($operation)
     {
         try {
             switch ($operation) {
@@ -526,12 +526,11 @@ class QueryBuilder
             }
 
             $sql = $this->db->query($this->query, $this->binds);
-            //var_dump($this->model);
             $sql->setFetchMode(\PDO::FETCH_CLASS, get_class($this->model));
 
             return $sql;
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage();
             die();
         }
@@ -567,7 +566,7 @@ class QueryBuilder
      *
      * @return Core\QueryBuilder
      */
-    public function set()
+    protected function set()
     {
         $this->update .= "UPDATE " . $this->model->table . " SET ";
 
@@ -606,7 +605,7 @@ class QueryBuilder
      *
      * @return Core\QueryBuilder
      */
-    public function setDelete()
+    protected function setDelete()
     {
         $this->delete = "UPDATE " . $this->model->table . " SET deleted_at = ?";
         $this->binds[] = date('Y-m-d H:i:s');
