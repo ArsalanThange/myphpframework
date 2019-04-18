@@ -210,55 +210,33 @@ class QueryBuilder
     /**
      * Generates response structure which is to be returned after executing SELECT queries.
      *
-     * @return App\Models\Model
+     * @param sting $relation Name of the method declared in Model Class for relationship
+     * @return void
      */
-    protected function generateResponse()
+    protected function generateResponse($relation)
     {
         foreach ($this->results as $result) {
 
-            foreach ($this->relations as $relation => $values) {
+            $array = [];
 
-                $array = [];
-                foreach ($values as $key => $object) {
+            $rel = $this->model->$relation();
 
-                    $rel = $this->model->$relation();
+            $foreign_key = $rel['foreign_key'];
 
-                    $foreign_key = $rel['foreign_key'];
-
-                    if ($rel['relation'] == 'belongsTo') {
-
-                        // Attach single object if the relation is Many-To-One or One-to-One
-                        if ($result->$foreign_key == $object->id) {
-                            $array = $object;
-                        }
-
-                    } elseif ($rel['relation'] == 'hasMany') {
-
-                        // Attach Array of objects if the relation is One-To-Many
-                        if ($result->id == $object->$foreign_key) {
-                            $array[] = $object;
-                        }
-
-                    } elseif ($rel['relation'] == 'belongsToMany') {
-
-                        $primary_table_key = $rel['primary_table_key'];
-
-                        foreach ($this->intermediate_results as $value) {
-
-                            if ($result->id == $value->$primary_table_key && $object->id == $value->$foreign_key) {
-                                $array[] = $object;
-                            }
-
-                        }
-
-                    }
-
-                }
-
-                $result->relations[$relation] = $array;
-
+            switch ($rel['relation']) {
+                case 'hasMany':
+                    $array = $this->getHasManyForResponse($result, $foreign_key);
+                    break;
+                case 'belongsTo':
+                    $array = $this->getBelongsToForResponse($result, $foreign_key);
+                    break;
+                case 'belongsToMany':
+                    $primary_table_key = $rel['primary_table_key'];
+                    $array = $this->getBelongsToManyForResponse($result, $foreign_key, $primary_table_key);
+                    break;
             }
 
+            $result->relations[$relation] = $array;
         }
     }
 
