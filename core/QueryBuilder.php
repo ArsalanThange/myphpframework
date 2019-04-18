@@ -297,6 +297,29 @@ class QueryBuilder
     }
 
     /**
+     * Filter the relationship results and return records only for the current object.
+     * For Many-To-Many.
+     *
+     * @param App\Model $obj            Object of the current Model Class
+     * @param string $foreign_key       Foreign key for the relationship defined in Model Class
+     * @param string $primary_table_key Column name of the primary table in intermediate table
+     * @return array
+     */
+    protected function getBelongsToManyForResponse($obj, $foreign_key, $primary_table_key)
+    {
+        $results = array_filter($this->relations, function ($elem) use ($obj, $foreign_key, $primary_table_key) {
+
+            $value = array_filter($this->intermediate_results, function ($res) use ($elem, $obj, $foreign_key, $primary_table_key) {
+                return $obj->id == $res->$primary_table_key && $elem->id == $res->$foreign_key;
+            });
+
+            return count($value);
+
+        });
+        return $results;
+    }
+
+    /**
      * Fetch relationship records for One-To-Many relationship.
      *
      * @param Model $obj            Object of the current Model Class
