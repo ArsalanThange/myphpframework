@@ -2,6 +2,7 @@
 
 This framework consists below functionalities
 
+- ORM
 - CRUD operations
 - Soft Deletes
 - Relationship declaration in Models
@@ -26,3 +27,19 @@ As I have started development of this framework only a few weeks back, there are
 - More functions for Database such as LIMIT and Pagination.
 - More error handling.
 - And many more!
+
+## Declaring Routes for Application
+Routes can be defined in [routes.php](https://github.com/ArsalanThange/myphpframework/blob/master/routes/routes.php) inside the routes folder.
+Currently only supports `GET` and `POST` requests.
+First parameter is the route which can be accessed in your application.
+Second parameter is the Controller and Method (Controller@method) to which this route must go to.
+```php
+$route->get('/login', 'LoginController@showlogin');
+$route->post('/login', 'LoginController@login');
+```
+Routes can be declared with `middlewares`. If defined, Middlewares are executed whenever someone tries to access the route. Middlewares are covered more in depth below!
+```php
+$route->get('/login', 'LoginController@showlogin')->middleware('guest');
+$route->get('/', 'HomeController@index')->middleware('auth');
+```
+Appropriate HTTP errors are thrown if someone tries to access routes not declared or if they do not have access.
