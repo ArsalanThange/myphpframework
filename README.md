@@ -190,3 +190,28 @@ class HomeController extends Controller
     }
 }
 ```
+
+## Views
+All views are defined in [views](https://github.com/ArsalanThange/myphpframework/tree/master/app/views) folder. A view is an HTML page. A view file **must** end with the extension `.vw.php`.
+
+#### Passing data from Controller to View
+A view can access data from the `Controller` if passed during rendering.
+```php
+namespace App\Controllers;
+
+use Core\Request;
+
+class HomeController extends Controller
+{
+    public function index(Request $request)
+    {
+        $message = 'Welcome to my Framework';
+
+        $this->view('index', $message)->render();
+    }
+}
+```
+The view file can now access the data of `$message` using `$this->view_data`.
+```php
+<h1> <?php echo $this->view_data ?> </h1>
+```
