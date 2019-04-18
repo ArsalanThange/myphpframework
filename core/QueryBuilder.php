@@ -407,11 +407,7 @@ class QueryBuilder
      */
     public function where($column, $operator, $value)
     {
-        if (strpos($this->where, "WHERE") === false) {
-            $this->where = " WHERE ";
-        } else {
-            $this->where .= " AND ";
-        }
+        $this->appendWhere();
 
         $this->where .= $column . " " . $operator . " " . ' ? ';
 
@@ -429,11 +425,7 @@ class QueryBuilder
      */
     public function whereIn($column, $values)
     {
-        if (strpos($this->where, "WHERE") === false) {
-            $this->where = " WHERE ";
-        } else {
-            $this->where .= " AND ";
-        }
+        $this->appendWhere();
 
         $where_in_prepare = implode(', ', array_fill(0, count($values), ' ? '));
 
@@ -442,6 +434,23 @@ class QueryBuilder
         $this->binds = array_merge($this->binds, $values);
 
         return $this;
+    }
+
+    /**
+     * Append or Initiate WHERE clause.
+     *
+     * @param string $column    Database column on which WHEREIN clause is to be used
+     * @param array $values     Values to be checked for the column
+     * @return Core\QueryBuilder
+     */
+    protected function appendWhere($and = true) {
+        if (strpos($this->where, "WHERE") === false) {
+            $this->where = " WHERE ";
+        } elseif ($and) {
+            $this->where .= " AND ";
+        } else {
+            $this->where .= " OR ";
+        }
     }
 
     /**
