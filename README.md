@@ -219,8 +219,97 @@ The view file can now access the data of `$message` using `$this->view_data`.
 ## Database
 Readme for Database calls and ORM coming soon! Lots of functionality has been built and can be found in HomeController. A lot of functionalities are still remaining and in the roadmap!
 
+## Retrieving Records
+You can retrieve an array of records or a single record. In the below example we retrieve records of the `Message` Model
+```php
+$message = new Message;
+$messages = $message->select()->get();
+```
+
+To retrieve a single record
+```php
+$message = new Message;
+$messages = $message->select()->first();
+```
+
+To select particualr columnns
+```php
+$message = new Message;
+$messages = $message->select(['id', 'message', 'created_at'])->get();
+```
+
+#### Filter records
+You can filter records using `where` and `orWhere` methods. Supports all DB comparisons such as `=`, `!=`, `>`, `<`, `>=`, `<=` and `LIKE`.
+```php
+$message = new Message;
+$messages = $message->select()->where('message', 'LIKE', '%awesome%')->get();
+```
+You can chain multiple `where` to filter the records further
+```php
+$message = new Message;
+$messages = $message->select()
+                ->where('message', 'LIKE', '%awesome%')
+                ->where('subject', '=', 'foo')
+                ->orWhere('id', '=', 1)
+                ->get();
+```
+
+#### Retrieve Records with relationships
+Relationships are defined in Model. In depth of relationships will be covered in the Relationships section.
+Here we define that `Message` is related to `User` via Many-to-One relationship
+```php
+namespace App\Models;
+
+class Message extends Model
+{
+    /**
+     * Setting table value for Message class.
+     *
+     * @var string
+     */
+    protected $table = 'messages';
+
+    /**
+     * Declaring Many-To-One relationship between Message and User.
+     *
+     * @return array
+     */
+    public function user()
+    {
+        return [
+            'relation' => 'belongsTo',
+            'class' => 'User',
+            'foreign_key' => 'user_id',
+        ];
+    }
+```
+Now to retrieve `User` records along with `Message`
+```php
+$message = new Message;
+$messages = $message->select()->with(['user'])->get();
+```
+
+This can be nested, for example if `User` has a defined relationship with `Comment`, you can fetch the user's comments with below code
+```php
+$message = new Message;
+$messages = $message->select()->with(['user.comments'])->get();
+```
+This will fetch `Message` along with `User` and each `User` will contain `Comment` related to itself.
+
+If multiple relationships are declared in `Model` you can fetch them with below code
+```php
+$message = new Message;
+$messages = $message->select()->with(['user', 'rating', 'feedbacks'])->get();
+```
+
+The relationships are retrieved in a database efficient way. For example when when fetching `Message` with `User` only 2 database queries are executed. One to fetch the messages and one to fetch the users.
+The response is later parsed completely in PHP.
+
+## Saving Records
+Readme Coming Soon. Functionality example can be found in HomeController.
+
 ## Request Validations
-Readme Coming Soon.
+Readme Coming Soon. Functionality example can be found in HomeController.
 
 ## Authentication
-Readme Coming soon.
+Readme Coming soon. Functionality example can be found in LoginController.
