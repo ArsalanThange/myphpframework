@@ -17,8 +17,9 @@ class Request
      * @param array $request    Incoming $_REQUEST parameter
      * @return void
      */
-    public function __construct($request)
+    public function __construct()
     {
+        $request = $this->isJson() ? $this->getJsonRequestParams() : $this->getRequestParams();        
         $this->makeRequest($request);
 
         //Helper function
@@ -42,6 +43,37 @@ class Request
             }
 
         }
+    }
+
+    /**
+     * Checks whether incoming request is JSON
+     *
+     * @return boolean
+     */
+    public function isJson()
+    {
+        $content_type = isset($_SERVER['CONTENT_TYPE']) ? trim($_SERVER['CONTENT_TYPE']) : '';
+        return strcasecmp($content_type, 'application/json') != 0 ? false : true;
+    }
+
+    /**
+     * Get Request Parameters if the incoming request is JSON
+     *
+     * @return \stdClass
+     */
+    public function getJsonRequestParams()
+    {
+        return json_decode(file_get_contents("php://input"));
+    }
+
+    /**
+     * Get Request Parameters if the incoming request is not JSON
+     *
+     * @return array
+     */
+    public function getRequestParams()
+    {
+        return $_REQUEST;
     }
 
     /**

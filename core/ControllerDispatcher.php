@@ -53,8 +53,7 @@ class ControllerDispatcher
         $c = new $controller;
         $method = $this->method;
 
-        $request = new Request($_REQUEST);
-
+        $request = new Request;
         $c->$method($request);
     }
 }
